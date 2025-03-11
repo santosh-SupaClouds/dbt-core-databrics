@@ -1,0 +1,99 @@
+version: 2
+
+sources:
+  - name: teradata_source
+    database: "{{ var('raw_database') }}"
+    schema: "{{ env_var('TERADATA_SCHEMA', 'your_teradata_schema') }}"
+    description: "Raw data from Teradata production database"
+    
+    tables:
+      - name: customers
+        description: "Customer master data from Teradata"
+        columns:
+          - name: customer_id
+            description: "Primary key for customer"
+            tests:
+              - unique
+              - not_null
+          - name: customer_name
+            description: "Customer full name"
+          - name: email
+            description: "Customer email address"
+            tests:
+              - not_null
+          - name: phone
+            description: "Customer phone number"
+          - name: address
+            description: "Customer physical address"
+          - name: city
+            description: "Customer city"
+          - name: state
+            description: "Customer state/province"
+          - name: zip_code
+            description: "Customer postal code"
+          - name: country
+            description: "Customer country"
+          - name: region_code
+            description: "Region code"
+          - name: created_at
+            description: "Date customer was created"
+          - name: updated_at
+            description: "Date customer was last updated"
+      
+      - name: orders
+        description: "Order transactions from Teradata"
+        columns:
+          - name: order_id
+            description: "Primary key for order"
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customers table"
+            tests:
+              - relationships:
+                  to: source('teradata_source', 'customers')
+                  field: customer_id
+              - not_null
+          - name: order_date
+            description: "Date order was placed"
+            tests:
+              - not_null
+          - name: order_status
+            description: "Current status of order"
+            tests:
+              - accepted_values:
+                  values: ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+          - name: order_total
+            description: "Total amount of the order"
+            tests:
+              - not_null
+          - name: created_at
+            description: "Date order was created"
+          - name: updated_at
+            description: "Date order was last updated"
+      
+      - name: products
+        description: "Product catalog from Teradata"
+        columns:
+          - name: product_id
+            description: "Primary key for product"
+            tests:
+              - unique
+              - not_null
+          - name: product_name
+            description: "Product name"
+            tests:
+              - not_null
+          - name: description
+            description: "Product description"
+          - name: price
+            description: "Product price"
+            tests:
+              - not_null
+          - name: category_id
+            description: "Product category ID"
+          - name: created_at
+            description: "Date product was created"
+          - name: updated_at
+            description: "Date product was last updated"

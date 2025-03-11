@@ -1,0 +1,14 @@
+region_code,region_name
+N,North
+S,South
+E,East
+W,West
+NE,Northeast
+NW,Northwest
+SE,Southeast
+SW,Southwest
+C,Central
+EU,Europe
+APAC,Asia Pacific
+LATAM,Latin America
+MENA,Middle East & North Africa

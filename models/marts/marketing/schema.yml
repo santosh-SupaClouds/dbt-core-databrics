@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: customer_sales_summary
+    description: "Customer sales aggregated by year and month for marketing analysis"
+    config:
+      tags: ["marketing", "reporting"]
+    columns:
+      - name: order_year
+        description: "Year of orders"
+        tests:
+          - not_null
+      - name: order_month
+        description: "Month of orders"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: customer_name
+        description: "Customer name"
+      - name: email
+        description: "Customer email"
+      - name: region_code
+        description: "Region code"
+      - name: region_name
+        description: "Region name"
+      - name: customer_segment
+        description: "Customer segment based on lifetime value"
+      - name: order_count
+        description: "Number of orders in this period"
+        tests:
+          - not_null
+      - name: total_sales
+        description: "Total sales amount in this period"
+        tests:
+          - not_null
+      - name: avg_order_value
+        description: "Average order value in this period"
+        tests:
+          - not_null
+      - name: lifetime_orders
+        description: "Total lifetime orders for this customer"
+      - name: lifetime_value
+        description: "Total lifetime value for this customer"
+      - name: loaded_at
+        description: "Timestamp when this record was loaded"

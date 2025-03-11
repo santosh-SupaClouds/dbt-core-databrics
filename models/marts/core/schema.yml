@@ -1,0 +1,129 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension table with enriched attributes and metrics"
+    config:
+      tags: ["core", "dimension"]
+    columns:
+      - name: customer_id
+        description: "Primary key for customer"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer full name"
+      - name: email
+        description: "Customer email address"
+      - name: phone
+        description: "Customer phone number"
+      - name: address
+        description: "Customer physical address"
+      - name: city
+        description: "Customer city"
+      - name: state
+        description: "Customer state/province"
+      - name: zip_code
+        description: "Customer postal code"
+      - name: country
+        description: "Customer country"
+      - name: region_code
+        description: "Region code"
+      - name: region_name
+        description: "Region name (from region mapping)"
+      - name: lifetime_orders
+        description: "Total number of orders placed by customer"
+      - name: lifetime_value
+        description: "Total lifetime value of customer (sum of all order totals)"
+      - name: first_order_date
+        description: "Date of customer's first order"
+      - name: last_order_date
+        description: "Date of customer's most recent order"
+      - name: customer_segment
+        description: "Customer segment based on lifetime value"
+        tests:
+          - accepted_values:
+              values: ['High Value', 'Medium Value', 'Low Value', 'No Orders']
+      - name: created_at
+        description: "Date customer was created"
+      - name: updated_at
+        description: "Date customer was last updated"
+      - name: loaded_at
+        description: "Timestamp when this record was loaded into the data warehouse"
+
+  - name: fact_orders
+    description: "Order fact table with transaction details"
+    config:
+      tags: ["core", "fact"]
+    columns:
+      - name: order_id
+        description: "Primary key for order"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to dim_customers"
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+          - not_null
+      - name: order_date
+        description: "Date order was placed"
+        tests:
+          - not_null
+      - name: order_status
+        description: "Current status of order"
+        tests:
+          - accepted_values:
+              values: ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+      - name: order_total
+        description: "Total amount of the order"
+      - name: order_year
+        description: "Year of order date (for partitioning)"
+      - name: order_month
+        description: "Month of order date (for partitioning)"
+      - name: order_day
+        description: "Day of order date"
+      - name: valid_order_total
+        description: "Order total that excludes cancelled orders"
+      - name: created_at
+        description: "Date order was created"
+      - name: updated_at
+        description: "Date order was last updated"
+      - name: loaded_at
+        description: "Timestamp when this record was loaded into the data warehouse"
+
+  - name: dim_products
+    description: "Product dimension table with enriched attributes"
+    config:
+      tags: ["core", "dimension"]
+    columns:
+      - name: product_id
+        description: "Primary key for product"
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Product name"
+      - name: description
+        description: "Product description"
+      - name: price
+        description: "Product price"
+      - name: category_id
+        description: "Product category ID"
+      - name: category_name
+        description: "Category name (from category mapping)"
+      - name: department
+        description: "Department (from category mapping)"
+      - name: price_tier
+        description: "Price tier classification"
+        tests:
+          - accepted_values:
+              values: ['Premium', 'Standard', 'Basic']
+      - name: created_at
+        description: "Date product was created"
+      - name: updated_at
+        description: "Date product was last updated"
+      - name: loaded_at
+        description: "Timestamp when this record was loaded into the data warehouse"
