@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: int_customer_orders
+    description: "Aggregated customer order information with metrics"
+    columns:
+      - name: customer_id
+        description: "Primary key for customer"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer full name"
+      - name: email
+        description: "Customer email address"
+      - name: region_code
+        description: "Region code"
+      - name: total_orders
+        description: "Total number of orders placed by customer"
+        tests:
+          - not_null
+      - name: lifetime_value
+        description: "Total lifetime value of customer (sum of all order totals)"
+        tests:
+          - not_null
+      - name: first_order_date
+        description: "Date of customer's first order"
+      - name: last_order_date
+        description: "Date of customer's most recent order"
+      - name: customer_tenure_days
+        description: "Number of days between first and last order"

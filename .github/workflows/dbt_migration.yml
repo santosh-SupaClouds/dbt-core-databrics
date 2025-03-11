@@ -1,0 +1,46 @@
+name: dbt Migration Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          pip install dbt-core dbt-teradata dbt-databricks
+      - name: Run dbt tests against Teradata
+        run: |
+          dbt deps
+          dbt seed --target dev
+          dbt run --target dev
+          dbt test --target dev
+        env:
+          DBT_TERADATA_PASSWORD: ${{ secrets.TERADATA_PASSWORD }}
+
+  deploy:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          pip install dbt-core dbt-databricks
+      - name: Deploy to Databricks
+        run: |
+          dbt deps
+          dbt run --target prod
+        env:
+          DBT_DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}

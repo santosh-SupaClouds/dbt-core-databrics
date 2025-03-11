@@ -1,0 +1,19 @@
+category_id,category_name,department
+1,Electronics,Technology
+2,Computers,Technology
+3,Smartphones,Technology
+4,Home Appliances,Home
+5,Kitchen,Home
+6,Furniture,Home
+7,Clothing,Fashion
+8,Shoes,Fashion
+9,Jewelry,Fashion
+10,Books,Media
+11,Movies,Media
+12,Music,Media
+13,Toys,Kids
+14,Baby,Kids
+15,Sports,Outdoors
+16,Fitness,Outdoors
+17,Beauty,Personal Care
+18,Health,Personal Care
