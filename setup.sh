@@ -55,6 +55,12 @@ fi
 # Install dependencies
 echo -e "${YELLOW}Installing project dependencies...${NC}"
 pip install -r requirements.txt
+
+# Install dbt-teradata from GitHub
+echo -e "${YELLOW}Installing dbt-teradata from GitHub...${NC}"
+pip install git+https://github.com/Teradata/dbt-teradata.git
+
+# Install other dbt dependencies
 dbt deps
 
 # Create necessary directories

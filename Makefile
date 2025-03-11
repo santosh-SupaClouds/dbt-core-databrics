@@ -38,6 +38,8 @@ setup: install deps env-check
 install:
 	@echo "Installing required dependencies..."
 	pip install -r requirements.txt
+	@echo "Installing dbt-teradata from GitHub..."
+	pip install git+https://github.com/Teradata/dbt-teradata.git
 
 # Install dbt dependencies
 deps:

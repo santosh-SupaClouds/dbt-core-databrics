@@ -189,6 +189,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install dbt-teradata from GitHub (not available in PyPI)
+pip install git+https://github.com/Teradata/dbt-teradata.git
+
+# Install dbt dependencies
 dbt deps
 
 # Create .env file for credentials (VS Code can load these with Python extension)
